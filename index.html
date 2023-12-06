@@ -1,0 +1,239 @@
+<html>
+	<head>
+		<title>Support Web - MoDeW</title>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</head>
+	<style>
+	* {
+		outline: none;
+		font-family: sans-serif;
+		user-select: none;
+	}
+	*::placeholder {
+		color: #ccc;
+	}
+
+	*::-webkit-scrollbar {
+		background-color: transparent;
+		width: 4px;
+	}
+	*::-webkit-scrollbar-thumb {
+		background-color: #4329e7;
+	}
+	*::-o-scrollbar {
+		background-color: transparent;
+		width: 4px;
+	}
+	*::-o-scrollbar-thumb {
+		background-color: #4329e7;
+	}
+	body {
+		background: #0c052e;
+		color: #7B68EE;
+	}
+	body h1,
+	body p	{
+		text-align: center;
+	}
+	.chat {
+		background: #7B68EE;
+		border: 0;
+		border-radius: 50rem;
+		padding: 10px;
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		animation: load 0.5s infinite;
+		animation-iteration-count: 1;
+		transition: 0.15s, animation 0.3s;
+	}
+	@keyframes load {
+		0%  { right: -100px; }
+		50% { right: -100px; }
+		60% { right: -100px; }
+		65% { right: -100px; }
+		70% { right: -100px; }
+		75% { right: -100px; }
+		80% { right: -100px; }
+		85% { right: -100px; }
+		90% { right: -100px; }
+		95% { right: -100px; }
+		95% { right: 20px; }
+	}
+	.chat img {
+		width: 50px;
+	}
+	.chat:hover {
+		cursor: pointer;
+		background: #6b56ec;
+	}
+	.chat-container {
+		width: 220px;
+		height: 300px;
+		border-radius: 5px;
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		background-color: transparent;
+		display: none;
+		animation: showChatPanel 0.5s ease-in-out forwards;
+		overflow: hidden;
+	}
+	@keyframes showChatPanel {
+		0% { opacity: 0; transform: translateY(100%); }
+		100% { opacity: 1; transform: translateY(0); }
+	}
+	.form-container {
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
+		background: #7B68EE;
+		border-radius: 10px;
+		overflow-y: scroll;
+	}
+	.form-container p {
+		direction: rtl;
+	}
+	.form-container input[type="text"],
+	.form-container input[type="email"],
+	.form-container textarea {
+		width: 90%;
+		padding: 8px;
+		border: 1px solid #ccc;
+		background: transparent;
+		direction: ltr;
+		margin: 5px;
+		resize: none;
+		color: white;
+	}
+	.form-container input[type="submit"] {
+		background-color: #4329e7;
+		color: #fff;
+		border: none;
+		border-radius: 3px;
+		padding: 10px;
+		cursor: pointer;
+		width: 90%;
+		transition: 0.3s;
+	}
+	.form-container input[type="submit"]:hover {
+		background-color: #6b56ec;
+	}
+	.form-head button {
+		background: transparent;
+		border-radius: 50rem;
+		transition: 0.15s;
+		border: 0;
+		padding: 10px;
+	}
+	.form-head button:hover {
+		background: #6b56ec;
+		transform: rotate(-90deg);
+		cursor: pointer;
+	}
+	.form-head button img {
+		width: 10px;
+	}
+	.form-head p {
+		float: right;
+		font-size: 10px;
+		margin-right: 10px;
+		direction: rtl;
+		color: white;
+	}
+	.br-mobile { display: none; }
+	@media only screen and (max-width: 768px) {
+		.chat-container { width: 100%; height: 100vh; top: 0; left: 0; border-radius: 0; }
+		.form-container { border-radius: 0; }
+		.br-mobile { display: block; }
+		.form-head p { font-size: 15px; }
+		.form-head button {  }
+		.form-head button img { width: 25px; }
+	}
+	</style>
+	<body>
+		<button onclick="openpnl()" class="chat"><img src="chat.png" draggable="false"></button>
+		<div class="chat-container" id="chatContainer">
+		<form class="form-container" onsubmit="submitForm(event)">
+			<div class="form-head">
+				<button onclick="openpnl()"><img src="close.png"></button>
+				<p>Hi</p>
+			</div>
+			<br class="br-mobile">
+			<br class="br-mobile">
+			<br class="br-mobile">
+			<br class="br-mobile">
+			<br class="br-mobile">
+			<center>
+				<input type="text" placeholder="Name" required>
+				<input type="email" placeholder="Email" required>
+				<textarea rows="4" placeholder="Message" required></textarea>
+				<input type="submit" value="Send">
+				<br>
+				<br>
+			</center>
+		</form>
+		</div>
+	</body>
+	<script>
+	function openpnl(){
+		var chatContainer = document.getElementById("chatContainer");
+		if (chatContainer.style.display === "block") {
+			chatContainer.style.display = "none";
+		} else {
+			chatContainer.style.display = "block";
+		}
+	}
+
+function submitForm(e) {
+  e.preventDefault();
+  var nameInput = document.querySelector(".form-container input[type='text']");
+  var emailInput = document.querySelector(".form-container input[type='email']");
+  var messageInput = document.querySelector(".form-container textarea");
+  
+  var name = nameInput.value;
+  var email = emailInput.value;
+  var message = messageInput.value;
+
+  nameInput.value = "";
+  emailInput.value = "";
+  messageInput.value = "";
+
+  var webhookUrl = ""; // Discord Webhook URL
+
+	var payload = {
+		embeds: [{
+			title: "**💬 New Message**",
+			    fields: [
+					{ name: "**🧑‍🦲 Name**", value: `${name}`, inline: true },
+					{ name: "**✉️ E-mail**", value: `${email}`, inline: true }
+				],
+			description: `**📝 Message:** \n${message}`,
+			color: 8087790,
+			timestamp: new Date().toISOString()
+		}]
+	};
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(response) {
+    if (response.ok) {
+      var formContainer = document.querySelector(".form-container p");
+      formContainer.innerHTML = `Hi, ${name}`;
+	  Swal.fire('Success', 'Message sended!', 'success');
+    } else {
+      Swal.fire('Oops...', 'Something went wrong!', 'error');
+    }
+  })
+  .catch(function(error) {
+    Swal.fire('Oops...', error, 'error');
+  });
+}
+	</script>
+<html>
